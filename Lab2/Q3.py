@@ -11,7 +11,7 @@ class Graph():
         print("Connections:")
         for i in self.nodes:
             for j in self.adj_list.get(i):
-                print(f'({i}->{j})',end=" ")
+                print(f'({i}->{j[0]})',end=" ")
             print()
          
         
@@ -20,10 +20,12 @@ class Graph():
             self.adj_list[origin].append(dest)
         else:
             self.adj_list[origin] = [dest]
+        if dest in self.adj_list:
+            self.adj_list[dest].append(origin)
+        else:
+            self.adj_list[dest] = [origin]
+ 
 
-        if dest not in self.adj_list:
-            self.adj_list[dest]=[]
-            
         self.nodes = sorted(list(self.adj_list.keys()))
         self.adj_matrix = [[0] * len(self.nodes) for _ in range(len(self.nodes))]
         
@@ -36,13 +38,13 @@ class Graph():
 
 def main():
     g1=Graph()
-    g1.connection(0,1)
-    g1.connection(1,2)
-    g1.connection(2,0)
-    g1.connection(2,1)
-    g1.connection(3,2)
-    g1.connection(4,5)
-    g1.connection(5,4)
+    g1.connection('A','C')
+    g1.connection('A','B')
+    g1.connection('A','E')
+    g1.connection('C','B')
+    g1.connection('C','E')
+    g1.connection('C','D')
+    g1.connection('D','B')
 
     g1.display()
 

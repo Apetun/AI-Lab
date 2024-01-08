@@ -12,16 +12,14 @@ class Graph():
         if origin in self.adj_list:
             self.adj_list[origin].append([dest,weight])
         else:
-            self.adj_list[origin] = []
-            self.adj_list[origin].append([dest,weight])
+            self.adj_list[origin] = [[dest,weight]]
         if dest not in self.adj_list:
             self.adj_list[dest]=[]
 
 
-        self.nodes = list(self.adj_list.keys())
-        self.adj_matrix=[]
-        for i in range(len(self.nodes)):
-            self.adj_matrix.append([0]*len(self.nodes))
+        self.nodes = sorted(list(self.adj_list.keys()))
+        self.adj_matrix = [[0] * len(self.nodes) for _ in range(len(self.nodes))]
+        
         for i in self.nodes:
             for j in self.adj_list.get(i):
                 self.adj_matrix[self.nodes.index(i)][self.nodes.index(j[0])]=j[1]
