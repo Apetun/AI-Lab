@@ -8,6 +8,13 @@ class Graph():
         print(self.adj_matrix)
         print("Adjacency List:")
         print(self.adj_list)
+        print("Connections:")
+        for i in self.nodes:
+            for j in self.adj_list.get(i):
+                print(f'({i}->{j[0]},{j[1]})',end=" ")
+            print()
+         
+        
     def connection(self,origin,dest,weight):
         if origin in self.adj_list:
             self.adj_list[origin].append([dest,weight])
@@ -31,11 +38,13 @@ class Graph():
 
 def main():
     g1=Graph()
-    g1.connection(1,2,1)
-    g1.connection(1,3,1)
-    g1.connection(2,3,3)
-    g1.connection(3,4,4)
-    g1.connection(4,1,5)
+    g1.connection(0,1,6)
+    g1.connection(1,2,7)
+    g1.connection(2,0,5)
+    g1.connection(2,1,4)
+    g1.connection(3,2,10)
+    g1.connection(4,5,1)
+    g1.connection(5,4,3)
 
     g1.display()
 
