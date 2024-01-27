@@ -1,38 +1,41 @@
 class Graph():
     def __init__(self):
-        self.adj_list={}
+        self.graph={}
         self.nodes=[]
     def display(self):
         print("Adjacency List:")
-        print(self.adj_list)
+        print(self.graph)
         
     def connection(self,origin,dest):
-        if origin in self.adj_list:
-            self.adj_list[origin].append(dest)
+        if origin in self.graph:
+            self.graph[origin].append(dest)
         else:
-            self.adj_list[origin] = [dest]
+            self.graph[origin] = [dest]
 
-        if dest not in self.adj_list:
-            self.adj_list[dest]=[]
+        if dest not in self.graph:
+            self.graph[dest]=[]
             
-        self.nodes = sorted(list(self.adj_list.keys()))
+        self.nodes = sorted(list(self.graph.keys()))
+
+    
+
+    def dfs(self,node,visited, stack):
+        if node not in visited:
+            visited.add(node)
+            for neighbour in self.graph[node]:
+                self.dfs(neighbour,visited,stack)
+            stack.append(node)
         
-    def util(self,i,visited,stack):
-        
-        visited[self.nodes.index(i)] = True
-        
-        for neighbor in self.adj_list[i]:
-            if not visited[self.nodes.index(neighbor)]:
-                self.util(neighbor, visited, stack)
-        stack.append(i)
+
+
     
     def topologicalOrder(self):
-        visited = [False] * len(self.nodes)
+        visited = set() 
         stack = []
 
-        for i in range(len(self.nodes)):
-            if not visited[i]:
-                self.util(self.nodes[i], visited, stack)
+        for node in self.nodes:
+            if node not in visited:
+                self.dfs(node, visited, stack)
                     
 
         print(stack[::-1])
