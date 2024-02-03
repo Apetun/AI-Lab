@@ -6,7 +6,6 @@ class Graph():
     def display(self):
         print("Adjacency List:")
         print(self.graph)
-        print(self.indegree)
     def connection(self,origin,dest):
         if origin in self.graph:
             self.graph[origin].append(dest)
