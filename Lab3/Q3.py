@@ -18,35 +18,28 @@ class Maze():
         self.nodes = sorted(list(self.graph.keys()))
 
     
-
-    def dfs(self,node,visited, stack,ends):
+    def dfs(self,node,visited, stack,end):
     	
-    	if node in ends:
+        if node == end:
             stack.append(node)
             print(stack)
             return True
-        elif self.graph[node].is_empty():
+        elif not self.graph[node]:
             return False
-    		
-    	if node not in visited:
-            visited.add(node)
-                        
-
+            	
+        if node not in visited:
+            visited.add(node)        
             for neighbour in self.graph[node]:
-                if self.dfs(neighbour,visited,stack,ends):
-                    stack.append(node)
-                    return True
-
-
-
-        
-
-
+                if self.dfs(neighbour,visited,stack+[node],end):                    
+                    return True    
+       
     
     def solve(self,start,ends):
-        visited = set() 
-        stack = []
-        self.dfs(start,visited,stack,ends)
+        
+        for i in ends:
+            visited = set() 
+            stack = []
+            self.dfs(start,visited,stack,i)
                     
 
 
@@ -76,7 +69,9 @@ def main():
     g1.connection(3,8)
     g1.connection(8,7)
     
-    
+    print("Adjacency list of the maze:")
+    g1.display()
+    print("All solutions:")
     g1.solve(20,[2,5])
 
 
