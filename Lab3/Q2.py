@@ -46,6 +46,8 @@ class Graph():
 
 def main():
     g1=Graph()
+
+    
     g1.connection(0,1)
     g1.connection(0,2)
     g1.connection(1,2)
