@@ -39,12 +39,9 @@ class Graph:
         if dest not in self.graph:
             self.graph[dest] = []
 
-        self.nodes = list(self.graph.keys())  # Update nodes list
-        self.adj_matrix = [[0] * len(self.nodes) for _ in range(len(self.nodes))]
 
-        for i in self.nodes:
-            for j in self.graph.get(i, []):
-                self.adj_matrix[self.nodes.index(i)][self.nodes.index(j[0])] = j[1]
+
+        self.nodes = sorted(list(self.graph.keys()))
 
     def bfs(self, visited, queue,end,cost):
         if not queue.is_empty():
