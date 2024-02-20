@@ -54,6 +54,7 @@ def main():
     g1.connection(3,1)
 
     g1.display()
+    print("Topological Order :")
     g1.topologicalOrder()
 
 

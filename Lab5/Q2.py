@@ -2,8 +2,8 @@ class PriorityQueue:
     def __init__(self):
         self.queue = []
 
-    def enqueue(self, item, priority):
-        element = (priority, item)
+    def enqueue(self, item, priority, prev_path=[]):
+        element = (priority, item, prev_path)
         self.queue.append(element)
         self.queue.sort()
 
@@ -42,29 +42,30 @@ class Graph:
 
         self.nodes = sorted(list(self.graph.keys()))
 
-    def bfs(self, visited, queue,end,cost):
+    def util(self, visited, queue, end, path=[]):
         if not queue.is_empty():
-            weight, value = queue.dequeue()
-            print(f'{value} ', end=" ")
+            weight, value, prev_path = queue.dequeue()
+            path = prev_path + [value]
             if value == end:
-                print(f'\nCost:{cost+weight}')
+                print(f'\nCost: {weight}')
+                print("Path:", ' -> '.join(path))
                 return
             for node in self.graph[value]:
                 if node[0] not in visited:
                     visited.add(node[0])
-                    queue.enqueue(node[0], node[1])
-            self.bfs(visited, queue,end,cost+weight)
+                    new_weight = node[1] + weight
+                    queue.enqueue(node[0], new_weight, path)
+            self.util(visited, queue, end, path)
 
-    def UniformCostSearch(self):
+
+    def UniformCostSearch(self,start,goals):
         
-        goals = {"G1","G2","G3"}
         for goal in goals:
             visited = set()
             queue = PriorityQueue()
-            queue.enqueue("S", 0)
-            cost=0
-            print(f"\npath from S to {goal} -> ",end="")
-            self.bfs(visited,queue,goal,cost)
+            queue.enqueue(start, 0)
+            print(f"\npath from {start} to {goal} -> ",end="")
+            self.util(visited,queue,goal)
 
 
 def main():
@@ -86,8 +87,7 @@ def main():
     g1.connection("F","G3",8)
 
     print("Solution:")
-    g1.display()
-    g1.UniformCostSearch()
+    g1.UniformCostSearch("S",{"G1","G2","G3"})
 
 
 if __name__ == "__main__":

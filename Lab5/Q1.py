@@ -2,8 +2,8 @@ class PriorityQueue:
     def __init__(self):
         self.queue = []
 
-    def enqueue(self, item, priority):
-        element = (priority, item)
+    def enqueue(self, item, priority, prev_path=[]):
+        element = (priority, item, prev_path)
         self.queue.append(element)
         self.queue.sort()
 
@@ -25,10 +25,11 @@ class Graph:
     def display(self):
         print("Adjacency List:")
         print(self.graph)
+        print(self.nodes)
         print("Connections:")
-        for i in self.nodes:
-            for j in self.graph.get(i, []):
-                print(f'({i}->{j[0]},{j[1]})', end=" ")
+        for node in self.nodes:
+            for j in self.graph.get(node):
+                print(f'({node}->{j[0]},{j[1]})', end=" ")
             print()
 
     def connection(self, origin, dest, weight):
@@ -39,35 +40,33 @@ class Graph:
         if dest not in self.graph:
             self.graph[dest] = []
 
-
-
         self.nodes = sorted(list(self.graph.keys()))
 
-    def bfs(self, visited, queue,end,cost):
+    def util(self, visited, queue, end, path=[]):
         if not queue.is_empty():
-            weight, value = queue.dequeue()
-            print(f'{value} ', end=" ")
+            weight, value, prev_path = queue.dequeue()
+            out = "S" if value == 0 else ("G" if value == 6 else value)
+            path = prev_path + [out]
             if value == end:
-                print(f'\nCost:{cost+weight}')
-                return True
-            elif not self.graph[value]:
-                return False
-
-
-
+                print(f'\nCost: {weight}')
+                print("Path:", ' -> '.join(map(str, path)))
+                return
             for node in self.graph[value]:
                 if node[0] not in visited:
                     visited.add(node[0])
-                    queue.enqueue(node[0], node[1])
-            self.bfs(visited, queue,end,cost+weight)
+                    new_weight = node[1] + weight
+                    queue.enqueue(node[0], new_weight, path)
+            self.util(visited, queue, end, path)
 
-    def UniformCostSearch(self):
-        visited = set()
-        queue = PriorityQueue()
-        queue.enqueue(0, 0)
-        cost=0
-        print("path from S to G -> ",end="")
-        self.bfs(visited, queue,6,cost)
+
+    def UniformCostSearch(self,start,goals):
+        
+        for goal in goals:
+            visited = set()
+            queue = PriorityQueue()
+            queue.enqueue(start, 0)
+            print(f"\npath from S to G -> ",end="")
+            self.util(visited,queue,goal)
 
 
 def main():
@@ -84,7 +83,7 @@ def main():
     g1.connection(5, 6, 3)
 
     print("Solution:")
-    g1.UniformCostSearch()
+    g1.UniformCostSearch(0,{6})
 
 
 if __name__ == "__main__":
