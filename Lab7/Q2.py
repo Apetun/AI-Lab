@@ -45,19 +45,21 @@ class Graph:
     def util(self, visited, queue, end, path=[],cost=0):
         if not queue.is_empty():
             weight, value, prev_path,path_cost = queue.dequeue()
-            path = prev_path + [value]
-            cost += path_cost
-            if value == end:
-                print(f'\nCost: {cost}')
-                print("Path:", ' -> '.join(path))
-                return
-            for node in self.graph[value]:
-                if node[0] not in visited:
-                    new_weight = node[1] +node[3]
-                    queue.enqueue(node[0], new_weight, path,node[1])
-                    visited.add(node[0])
-            print(queue.queue)
-            self.util(visited, queue, end, path,cost)
+            if value not in visited:
+                path = prev_path + [value]
+                cost += path_cost
+                if value == end:
+                    print(f'\nCost: {cost}')
+                    print("Path:", ' -> '.join(path))
+                    return
+                done=[]
+                for node in self.graph[value]:
+                    if node[0] not in done:
+                        new_weight = node[1] +node[3]
+                        queue.enqueue(node[0], new_weight, path,node[1])
+                        done.append(node[0])
+                visited.add(value)
+                self.util(visited, queue, end, path,cost)
 
 
     def AStarSearch(self,start,goals):
@@ -66,7 +68,6 @@ class Graph:
             visited = set()
             queue = PriorityQueue()
             queue.enqueue(start, 0)
-            print(f"\npath from {start} to {goal} -> ",end="")
             self.util(visited,queue,goal)
 
 
@@ -88,9 +89,7 @@ def main():
     g1.connection("E","G3",7,5,0)
     g1.connection("F","D",2,6,6)
     g1.connection("F","G3",8,6,0)
-
-    g1.display()
-
+    
     print("\nSolution:")
     g1.AStarSearch("S",["G1","G2","G3"])
 
