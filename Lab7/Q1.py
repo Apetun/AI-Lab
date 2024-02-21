@@ -37,28 +37,29 @@ class Graph:
             self.graph[origin].append((dest, pcost,hcostorigin,hcostdest))
         else:
             self.graph[origin] = [(dest, pcost,hcostorigin,hcostdest)]
-        if dest in self.graph:
-            self.graph[dest].append((origin,pcost,hcostdest,hcostorigin))
-        else:
-            self.graph[dest]=[(origin,pcost,hcostdest,hcostorigin)]
+        if dest not in self.graph:
+            self.graph[dest]=[]
 
         self.nodes = sorted(list(self.graph.keys()))
 
     def util(self, visited, queue, end, path=[],cost=0):
         if not queue.is_empty():
             weight, value, prev_path,path_cost = queue.dequeue()
-            path = prev_path + [value]
-            cost += path_cost
-            if value == end:
-                print(f'\nCost: {cost}')
-                print("Path:", ' -> '.join(path))
-                return
-            for node in self.graph[value]:
-                if node[0] not in visited:
-                    visited.add(node[0])
-                    new_weight = node[1] +node[3]
-                    queue.enqueue(node[0], new_weight, path,node[1])
-            self.util(visited, queue, end, path,cost)
+            if value not in visited:
+                path = prev_path + [value]
+                cost += path_cost
+                if value == end:
+                    print(f'\nCost: {cost}')
+                    print("Path:", ' -> '.join(path))
+                    return
+                done=[]
+                for node in self.graph[value]:
+                    if node[0] not in done:
+                        new_weight = node[1] +node[3]
+                        queue.enqueue(node[0], new_weight, path,node[1])
+                        done.append(node[0])
+                visited.add(value)
+                self.util(visited, queue, end, path,cost)
 
 
     def AStarSearch(self,start,goals):
@@ -67,7 +68,6 @@ class Graph:
             visited = set()
             queue = PriorityQueue()
             queue.enqueue(start, 0)
-            print(f"\npath from {start} to {goal} -> ",end="")
             self.util(visited,queue,goal)
 
 
@@ -90,7 +90,7 @@ def main():
     
 
     print("\nSolution:")
-    g1.AStarSearch("A",{"J"})
+    g1.AStarSearch("A",["J"])
 
 
 if __name__ == "__main__":
