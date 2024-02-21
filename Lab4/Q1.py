@@ -26,7 +26,6 @@ class Graph():
                     self.indegree[self.nodes.index(neighbor)] += 1
 
     def topologicalOrder(self):
-        visited = set()
         queue = []
 
         for node in self.nodes:
