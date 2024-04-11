@@ -36,10 +36,10 @@ class Maze():
     
     def solve(self,start,ends):
         
-        for i in ends:
+        for end in ends:
             visited = set() 
             stack = []
-            self.dfs(start,visited,stack,i)
+            self.dfs(start,visited,stack,end)
                     
 
 
